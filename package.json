@@ -18,5 +18,9 @@
   "devDependencies": {
     "@babel/core": "^7.9.0"
   },
-  "private": true
+  "private": true,
+  "name": "note_making_react",
+  "version": "1.0.0",
+  "repository": "https://github.com/ankit6271/note_making_react.git",
+  "license": "MIT"
 }
