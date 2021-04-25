@@ -1,4 +1,3 @@
-import { useDeviceOrientation } from "@react-native-community/hooks";
 import React, { useState } from "react";
 import {
   Button,
@@ -10,20 +9,21 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  FlatList,
 } from "react-native";
 
 export default function App() {
   const [changeText, setchangeText] = useState("");
   const [notes, setNotes] = useState([]);
-  useDeviceOrientation();
   const onChangeText = (value) => setchangeText(value);
-  const addNoteHandler = () => setNotes([...notes, changeText]);
+  const addNoteHandler = () =>
+    setNotes([...notes, { key: Math.random().toString(), value: changeText }]);
   return (
     <ScrollView style={styles.container}>
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "center", 
+          justifyContent: "center",
         }}
       >
         <Text style={styles.childView}>Note Making App</Text>
@@ -47,10 +47,12 @@ export default function App() {
           title="Add Note"
         ></Button>
       </View>
-      <View style={styles.notesView}>
-        {notes.map((value, index) => (
+      <FlatList
+        vertical={true}
+        keyExtractor={(item) => item.key}
+        data={notes}
+        renderItem={(value) => (
           <View
-            key={index}
             style={{
               borderColor: "#8D8C8C",
               borderWidth: 1,
@@ -60,10 +62,11 @@ export default function App() {
               placeholderTextColor: "#2E7BFF",
             }}
           >
-            <Text>{value}</Text>
+            <Text>{value.item.value}</Text>
           </View>
-        ))}
-      </View>
+        )}
+        style={styles.notesView}
+      />
     </ScrollView>
   );
 }
@@ -74,10 +77,10 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 5 : 0,
   },
   childView: {
-    fontSize:22,
-    fontFamily:"serif",
-    textShadowColor:"blue",
-    color:"#2E7BFF"
+    fontSize: 22,
+    fontFamily: "serif",
+    textShadowColor: "blue",
+    color: "#2E7BFF",
   },
   subChildView: {
     flexDirection: "row",
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
   notesView: {
     padding: 10,
     margin: 10,
-    backgroundColor:"#E6E4E4",
-    marginBottom:30
+    backgroundColor: "#E6E4E4",
+    marginBottom: 30,
   },
 });
