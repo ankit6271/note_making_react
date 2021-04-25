@@ -10,6 +10,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 
 export default function App() {
@@ -18,6 +19,9 @@ export default function App() {
   const onChangeText = (value) => setchangeText(value);
   const addNoteHandler = () =>
     setNotes([...notes, { key: Math.random().toString(), value: changeText }]);
+  const removeNoteHandler = (id) => {
+    return setNotes(notes.filter((value) => value.key != id));
+  }
   return (
     <ScrollView style={styles.container}>
       <View
@@ -48,22 +52,23 @@ export default function App() {
         ></Button>
       </View>
       <FlatList
-        vertical={true}
         keyExtractor={(item) => item.key}
         data={notes}
         renderItem={(value) => (
-          <View
-            style={{
-              borderColor: "#8D8C8C",
-              borderWidth: 1,
-              padding: 5,
-              marginVertical: 5,
-              backgroundColor: "white",
-              placeholderTextColor: "#2E7BFF",
-            }}
-          >
-            <Text>{value.item.value}</Text>
-          </View>
+          <TouchableOpacity onLongPress={removeNoteHandler.bind(this, value.item.key)}>
+            <View
+              style={{
+                borderColor: "#8D8C8C",
+                borderWidth: 1,
+                padding: 5,
+                marginVertical: 5,
+                backgroundColor: "white",
+                placeholderTextColor: "#2E7BFF",
+              }}
+            >
+              <Text>{value.item.value}</Text>
+            </View>
+          </TouchableOpacity>
         )}
         style={styles.notesView}
       />
